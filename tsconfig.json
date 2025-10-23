@@ -12,8 +12,11 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
+    // "module": "nodenext",
+    // "target": "esnext",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
@@ -38,6 +41,7 @@
     // "noPropertyAccessFromIndexSignature": true,
     // Recommended Options
     "strict": true,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,

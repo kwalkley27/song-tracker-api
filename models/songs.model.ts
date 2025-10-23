@@ -32,7 +32,12 @@ async function getSongs() {
     return Songs
 }
 
-module.exports = {
+// module.exports = {
+//     addSong,
+//     getSongs,
+// }
+
+export {
     addSong,
     getSongs,
 }

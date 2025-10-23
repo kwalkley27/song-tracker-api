@@ -1,9 +1,11 @@
 import express from "express";
-import { httpAddSongs, httpGetSongs } from "controllers/songs.controller"
+import { httpAddSong, httpGetSongs } from "./songs.controller.js"
 
 const songsRouter = express.Router()
 
 songsRouter.get('/', httpGetSongs)
-songsRouter.post('/', httpAddSongs)
+songsRouter.post('/', httpAddSong)
 
-module.exports = songsRouter
+//module.exports = songsRouter
+
+export { songsRouter };

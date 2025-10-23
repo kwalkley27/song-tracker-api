@@ -1,4 +1,4 @@
-import { addUser, getUsers } from "./../models/users.model.ts"
+import { addUser, getUsers } from "../models/users.model.js"
 import type { Request, Response } from "express"
 
 async function httpAddUser(req:Request, res:Response) {
