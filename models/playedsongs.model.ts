@@ -25,7 +25,7 @@ async function getPlayedSongs() {
     return PlayedSongs
 }
 
-module.exports = {
+export {
     addPlayedSong,
     getPlayedSongs,
 }

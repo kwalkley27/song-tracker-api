@@ -3,17 +3,17 @@ import type { Request, Response } from "express"
 
 async function httpAddSong(req:Request, res:Response) {
     const song = req.body
+
+    if (!song.artist || !song.title || !song.length || !song.genre) {
+        return res.status(400).json({ error: "Missing required song fields" })
+    }
+
     return res.status(200).json(await addSong(song))
 }
 
 async function httpGetSongs(req:Request, res:Response) {
     return res.status(200).json(await getSongs())
 }
-
-// module.exports = {
-//     httpAddSong,
-//     httpGetSongs,
-// }
 
 export {
     httpAddSong,

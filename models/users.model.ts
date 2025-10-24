@@ -19,6 +19,7 @@ let highestId = 1
 async function addUser(user:User) {
     const new_user = Object.assign({
         id: highestId+1,
+        lastPlayed: new Date().toISOString()
     }, user)
 
     Users.push(new_user)
@@ -29,11 +30,6 @@ async function addUser(user:User) {
 async function getUsers() {
     return Users
 }
-
-// module.exports = {
-//     addUser,
-//     getUsers,
-// }
 
 export {
     addUser,

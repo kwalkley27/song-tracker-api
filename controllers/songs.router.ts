@@ -6,6 +6,4 @@ const songsRouter = express.Router()
 songsRouter.get('/', httpGetSongs)
 songsRouter.post('/', httpAddSong)
 
-//module.exports = songsRouter
-
 export { songsRouter };

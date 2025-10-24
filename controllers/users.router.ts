@@ -6,6 +6,4 @@ const usersRouter = express.Router()
 usersRouter.get('/', httpGetUsers)
 usersRouter.post('/', httpAddUser)
 
-//module.exports = usersRouter
-
 export { usersRouter };
