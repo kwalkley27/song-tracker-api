@@ -1,8 +1,4 @@
-
-//id:string
-//username:string
-//instrument:string
-//lastPlayed:timestamp
+import prisma from "./prisma.js"
 
 type User = {
     username:string
@@ -18,17 +14,23 @@ let highestId = 1
 
 async function addUser(user:User) {
     const new_user = Object.assign({
-        id: highestId+1,
+        //id: highestId+1,
         lastPlayed: new Date().toISOString()
     }, user)
 
-    Users.push(new_user)
-    highestId+=1
-    return user
+    //Users.push(new_user)
+    //highestId+=1
+    //return user
+
+    return prisma.user.create({
+        data: new_user,
+    });
+
 }
 
 async function getUsers() {
-    return Users
+    //return Users
+    return prisma.user.findMany();
 }
 
 export {

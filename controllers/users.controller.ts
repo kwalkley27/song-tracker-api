@@ -8,6 +8,10 @@ async function httpAddUser(req:Request, res:Response) {
         return res.status(400).json({ error: "Missing required user fields" })
     }
 
+    if (Object.keys(user).length > 2) {
+        return res.status(400).json({ error: "Too many fields in user object" })
+    }
+
     return res.status(200).json(await addUser(user))
 }
 

@@ -8,6 +8,10 @@ async function httpAddSong(req:Request, res:Response) {
         return res.status(400).json({ error: "Missing required song fields" })
     }
 
+    if (Object.keys(song).length > 4) {
+        return res.status(400).json({ error: "Too many fields in song object" })
+    }
+
     return res.status(200).json(await addSong(song))
 }
 
