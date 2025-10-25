@@ -1,3 +1,4 @@
+import prisma from "./prisma.js"
 
 //userId:string
 //songId:string
@@ -17,12 +18,17 @@ const PlayedSongs = [
 
 async function addPlayedSong(playedSong:PlayedSong) {
 
-    PlayedSongs.push(playedSong)
-    return playedSong
+    // PlayedSongs.push(playedSong)
+    // return playedSong
+
+    return prisma.playedSong.create({
+        data: playedSong,
+    });
 }
 
 async function getPlayedSongs() {
-    return PlayedSongs
+    //return PlayedSongs
+    return prisma.playedSong.findMany();
 }
 
 export {

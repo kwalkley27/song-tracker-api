@@ -1,3 +1,4 @@
+import prisma from "./prisma.js"
 
 // id:number
 // artist:string
@@ -19,17 +20,22 @@ const Songs = [
 let highestId = 1
 
 async function addSong(song:Song) {
-    const new_song = Object.assign({
-        id: highestId+1,
-    }, song)
+    // const new_song = Object.assign({
+    //     id: highestId+1,
+    // }, song)
 
-    Songs.push(new_song)
-    highestId+=1
-    return song
+    //Songs.push(song)
+    //highestId+=1
+    //return song
+
+    return prisma.song.create({
+        data: song,
+    });
 }
 
 async function getSongs() {
-    return Songs
+    //return Songs
+    return prisma.song.findMany();
 }
 
 export {
