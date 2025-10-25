@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response } from "express";
-import { usersRouter } from "./controllers/users.router.js"
-import { songsRouter } from "./controllers/songs.router.js"
+import { usersRouter } from "./controllers/users/users.router.js"
+import { songsRouter } from "./controllers/songs/songs.router.js"
 
 const PORT = process.env.NODE_PORT || 3000
 
