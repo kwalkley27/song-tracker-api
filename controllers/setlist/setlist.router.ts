@@ -1,8 +1,8 @@
 import express from "express";
-// import { httpGetSetlist } from "controllers/setlist.controller.js"
+import { httpGetSetlist } from "../setlist/setlist.controller.js"
 
-// const setlistRouter = express.Router()
+const setlistRouter = express.Router()
 
-// setlistRouter.get('/', httpGetSetlist)
+setlistRouter.get('/', httpGetSetlist)
 
-// module.exports = setlistRouter
+module.exports = setlistRouter

@@ -1,6 +1,8 @@
 import { addSong, getSongs } from "../../models/songs.model.js"
 import type { Request, Response } from "express"
 
+//TODO: Recommend song to learn based on instrument, recently played songs, top charts, etc.
+
 async function httpAddSong(req:Request, res:Response) {
     const song = req.body
 
