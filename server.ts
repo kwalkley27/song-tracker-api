@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 import { usersRouter } from "./controllers/users/users.router.js"
 import { songsRouter } from "./controllers/songs/songs.router.js"
 import { playedSongsRouter } from "./controllers/playedsongs/playedsongs.router.js"
+import { setlistRouter } from "./controllers/setlist/setlist.router.js"
 
 const PORT = process.env.NODE_PORT || 3000
 
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/songs', songsRouter)
 app.use('/playedsongs', playedSongsRouter)
+app.use('/setlist', setlistRouter)
 app.get('/', (req:Request, res:Response) => {
     res.send('Hello')  //TODO: UPDATE ROUTE
 });

@@ -3,6 +3,8 @@ import { httpGetSetlist } from "../setlist/setlist.controller.js"
 
 const setlistRouter = express.Router()
 
-setlistRouter.get('/', httpGetSetlist)
+setlistRouter.get('/:userId', httpGetSetlist)
 
-module.exports = setlistRouter
+export { 
+    setlistRouter,
+}
