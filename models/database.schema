@@ -1,0 +1,23 @@
+
+type User {
+    id: ID! @unique
+    username: String!
+    instrument: String!
+    lastPlayed: DateTime! @default(now)
+}
+
+type Song {
+    id: ID! @unique
+    title: String!
+    artist: String!
+    length: Int!
+    genre: String!
+}
+
+type PlayedSong {
+    id: ID! @unique
+    timePlayed: DateTime! @default(now)
+    score: Int!
+    songId: Song! @relation(fields: [songId], references: [id])
+    userId: User! @relation(fields: [userId], references: [id])
+}
