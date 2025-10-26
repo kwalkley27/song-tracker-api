@@ -30,11 +30,11 @@ async function httpGetPlayedSongs(req:Request, res:Response) {
     return res.status(200).json(await getPlayedSongs())
 }
 
+// Gets the latest played songs for a user, limited by the specified number
+// of songs (default is 5). Returns [] if user is not found or has no played songs.
 async function httpGetLatestPlayedSongs(req:Request, res:Response) {
     const userId = parseInt(req.params.userId as string)
     const limit = parseInt(req.query.limit as string) || 5
-
-    //TODO: Validate userId and limit
 
     return res.status(200).json(await getLatestPlayedSongs(userId, limit))
 }

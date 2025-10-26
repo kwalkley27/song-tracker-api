@@ -141,3 +141,4 @@ vite.config.ts.timestamp-*
 /generated/prisma
 prisma/dev.db 
 prisma/migrations
+certs
