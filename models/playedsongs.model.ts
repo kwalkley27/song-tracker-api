@@ -17,7 +17,16 @@ async function getPlayedSongs() {
     return prisma.playedSong.findMany();
 }
 
+async function getLatestPlayedSongs(userId:number, limit:number) {
+    return await prisma.playedSong.findMany({
+        where: { userId },
+        orderBy: { timePlayed: 'desc' },
+        take: limit,
+    });
+}
+
 export {
     addPlayedSong,
     getPlayedSongs,
+    getLatestPlayedSongs
 }

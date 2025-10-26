@@ -1,4 +1,8 @@
-import { addPlayedSong, getPlayedSongs } from "../../models/playedsongs.model.js"
+import { 
+    addPlayedSong, 
+    getPlayedSongs,
+    getLatestPlayedSongs,
+} from "../../models/playedsongs.model.js"
 import type { Request, Response } from "express"
 
 async function httpAddPlayedSong(req:Request, res:Response) {
@@ -26,7 +30,17 @@ async function httpGetPlayedSongs(req:Request, res:Response) {
     return res.status(200).json(await getPlayedSongs())
 }
 
+async function httpGetLatestPlayedSongs(req:Request, res:Response) {
+    const userId = parseInt(req.params.userId as string)
+    const limit = parseInt(req.query.limit as string) || 5
+
+    //TODO: Validate userId and limit
+
+    return res.status(200).json(await getLatestPlayedSongs(userId, limit))
+}
+
 export {
     httpAddPlayedSong,
     httpGetPlayedSongs,
+    httpGetLatestPlayedSongs,
 }
