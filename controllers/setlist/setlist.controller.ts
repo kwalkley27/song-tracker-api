@@ -1,10 +1,6 @@
 import type { Request, Response } from "express"
 import prisma from "../../models/prisma.js"
 
-//TODO: Create based on length of set
-//TODO: Take genre into account
-//TODO: Generate setlist based on location/vibe/mood via LLM
-
 // Generate a random setlist of played songs for a user
 async function httpGetSetlist(req:Request, res:Response) {
     const userId = parseInt(req.params['userId'] as string);

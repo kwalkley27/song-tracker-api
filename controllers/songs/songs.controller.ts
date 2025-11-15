@@ -3,8 +3,6 @@ import type { Request, Response } from "express"
 import { createSongSchema } from "../../schemas/validation.js"
 import { ZodError } from "zod"
 
-//TODO: Recommend song to learn based on instrument, recently played songs, top charts, etc.
-
 async function httpAddSong(req:Request, res:Response) {
     try {
         // Validate request body with Zod
