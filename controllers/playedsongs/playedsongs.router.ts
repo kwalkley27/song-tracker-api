@@ -1,14 +1,144 @@
 import express from "express";
-import { 
-    httpGetPlayedSongs, 
-    httpAddPlayedSong, 
+import {
+    httpGetPlayedSongs,
+    httpAddPlayedSong,
     httpGetLatestPlayedSongs,
  } from "./playedsongs.controller.js"
 
 const playedSongsRouter = express.Router()
 
+/**
+ * @openapi
+ * /playedsongs:
+ *   get:
+ *     tags:
+ *       - Played Songs
+ *     summary: Get all played songs
+ *     description: Retrieve a list of all played song records
+ *     responses:
+ *       200:
+ *         description: List of played songs retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PlayedSong'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 playedSongsRouter.get('/', httpGetPlayedSongs)
+
+/**
+ * @openapi
+ * /playedsongs/latest/{userId}:
+ *   get:
+ *     tags:
+ *       - Played Songs
+ *     summary: Get latest played songs for a user
+ *     description: Retrieve the most recently played songs for a specific user
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: User ID
+ *         example: 1
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 5
+ *         description: Maximum number of songs to return
+ *         example: 10
+ *     responses:
+ *       200:
+ *         description: Latest played songs retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PlayedSong'
+ *       400:
+ *         description: Invalid userId or limit parameter
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 playedSongsRouter.get('/latest/:userId', httpGetLatestPlayedSongs)
+
+/**
+ * @openapi
+ * /playedsongs:
+ *   post:
+ *     tags:
+ *       - Played Songs
+ *     summary: Record a played song
+ *     description: Create a record of a song being played with a performance score
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - songId
+ *               - score
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: ID of the user who played the song
+ *                 example: 1
+ *               songId:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: ID of the song that was played
+ *                 example: 1
+ *               score:
+ *                 type: integer
+ *                 minimum: 0
+ *                 maximum: 100
+ *                 description: Performance score (0-100)
+ *                 example: 85
+ *     responses:
+ *       201:
+ *         description: Played song recorded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PlayedSong'
+ *       400:
+ *         description: Validation error or invalid foreign key reference
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 playedSongsRouter.post('/', httpAddPlayedSong)
 
 export {
