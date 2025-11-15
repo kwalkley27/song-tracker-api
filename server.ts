@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import morgan from 'morgan'
 import helmet from 'helmet'
 import cors from 'cors'
+import rateLimit from 'express-rate-limit'
 import https from "https"
 import fs from "fs"
 import path from "path"
@@ -44,6 +45,31 @@ app.use(helmet({
 }))
 app.use(morgan('combined'))
 app.use(express.json())
+
+// Rate limiting configuration
+const generalLimiter = rateLimit({
+  windowMs: parseInt(process.env['RATE_LIMIT_WINDOW_MS'] || '60000'), // 1 minute default
+  max: parseInt(process.env['RATE_LIMIT_MAX_REQUESTS'] || '100'), // 100 requests per window
+  message: { error: 'Too many requests, please try again later.' },
+  standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+  legacyHeaders: false, // Disable `X-RateLimit-*` headers
+});
+
+const strictLimiter = rateLimit({
+  windowMs: parseInt(process.env['RATE_LIMIT_WINDOW_MS'] || '60000'), // 1 minute default
+  max: parseInt(process.env['RATE_LIMIT_MAX_WRITES'] || '20'), // 20 write requests per window
+  message: { error: 'Too many write requests, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Only apply to POST/PUT/DELETE methods
+  skip: (req) => !['POST', 'PUT', 'DELETE'].includes(req.method),
+});
+
+// Apply general rate limiting to all requests
+app.use(generalLimiter);
+
+// Apply stricter rate limiting to write operations
+app.use(strictLimiter);
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
