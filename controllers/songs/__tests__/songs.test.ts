@@ -19,7 +19,23 @@ describe("Songs API", () => {
     expect(response.body.pagination).toHaveProperty('hasMore');
   });
 
-  it("POST / should add a new song", async () => {
+  it("POST / should add a new song with valid API key", async () => {
+    const newSong = {
+      artist: "Test Artist",
+      title: "Test Title",
+      length: 180,
+      genre: "Test Genre",
+    };
+
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(newSong);
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject(newSong);
+  });
+
+  it("POST / should return 401 without API key", async () => {
     const newSong = {
       artist: "Test Artist",
       title: "Test Title",
@@ -28,8 +44,24 @@ describe("Songs API", () => {
     };
 
     const response = await supertest(app).post("/").send(newSong);
-    expect(response.status).toBe(201);
-    expect(response.body).toMatchObject(newSong);
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty('error');
+  });
+
+  it("POST / should return 403 with invalid API key", async () => {
+    const newSong = {
+      artist: "Test Artist",
+      title: "Test Title",
+      length: 180,
+      genre: "Test Genre",
+    };
+
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "invalid-key")
+      .send(newSong);
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty('error');
   });
 
   it("POST / should return a 400 error if required fields are missing", async () => {
@@ -38,7 +70,10 @@ describe("Songs API", () => {
       title: "Test Title",
     };
 
-    const response = await supertest(app).post("/").send(newSong);
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(newSong);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('error');
   });
@@ -51,7 +86,10 @@ describe("Songs API", () => {
       genre: "Test Genre",
     };
 
-    const response = await supertest(app).post("/").send(invalidSong);
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(invalidSong);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('error');
   });
@@ -64,7 +102,10 @@ describe("Songs API", () => {
       genre: "Test Genre",
     };
 
-    const response = await supertest(app).post("/").send(invalidSong);
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(invalidSong);
     expect(response.status).toBe(400);
   });
 });

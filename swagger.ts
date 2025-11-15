@@ -18,6 +18,14 @@ const options: swaggerJsdoc.Options = {
       },
     ],
     components: {
+      securitySchemes: {
+        ApiKeyAuth: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'X-API-Key',
+          description: 'API key for authentication. Demo keys: demo-key-12345, admin-key-67890, test-key-abcdef',
+        },
+      },
       schemas: {
         Song: {
           type: 'object',

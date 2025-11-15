@@ -1,5 +1,6 @@
 import express from "express";
 import { httpAddUser, httpGetUsers } from "./users.controller.js"
+import { requireApiKey } from "../../middleware/apiKey.js"
 
 const usersRouter = express.Router()
 
@@ -73,6 +74,8 @@ usersRouter.get('/', httpGetUsers)
  *       - Users
  *     summary: Create a new user
  *     description: Register a new user with a username and instrument
+ *     security:
+ *       - ApiKeyAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -109,6 +112,18 @@ usersRouter.get('/', httpGetUsers)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Authentication required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Invalid API key
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       409:
  *         description: Username already exists
  *         content:
@@ -122,6 +137,6 @@ usersRouter.get('/', httpGetUsers)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-usersRouter.post('/', httpAddUser)
+usersRouter.post('/', requireApiKey, httpAddUser)
 
 export { usersRouter };

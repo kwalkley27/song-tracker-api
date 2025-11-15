@@ -4,6 +4,7 @@ import {
     httpAddPlayedSong,
     httpGetLatestPlayedSongs,
  } from "./playedsongs.controller.js"
+import { requireApiKey } from "../../middleware/apiKey.js"
 
 const playedSongsRouter = express.Router()
 
@@ -128,6 +129,8 @@ playedSongsRouter.get('/latest/:userId', httpGetLatestPlayedSongs)
  *       - Played Songs
  *     summary: Record a played song
  *     description: Create a record of a song being played with a performance score
+ *     security:
+ *       - ApiKeyAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -168,6 +171,18 @@ playedSongsRouter.get('/latest/:userId', httpGetLatestPlayedSongs)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Authentication required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Invalid API key
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       500:
  *         description: Internal server error
  *         content:
@@ -175,7 +190,7 @@ playedSongsRouter.get('/latest/:userId', httpGetLatestPlayedSongs)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-playedSongsRouter.post('/', httpAddPlayedSong)
+playedSongsRouter.post('/', requireApiKey, httpAddPlayedSong)
 
 export {
     playedSongsRouter,

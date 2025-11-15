@@ -1,5 +1,6 @@
 import express from "express";
 import { httpAddSong, httpGetSongs } from "./songs.controller.js"
+import { requireApiKey } from "../../middleware/apiKey.js"
 
 const songsRouter = express.Router()
 
@@ -77,6 +78,8 @@ songsRouter.get('/', httpGetSongs)
  *       - Songs
  *     summary: Add a new song
  *     description: Create a new song entry in the database
+ *     security:
+ *       - ApiKeyAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -123,6 +126,18 @@ songsRouter.get('/', httpGetSongs)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Authentication required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Invalid API key
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       500:
  *         description: Internal server error
  *         content:
@@ -130,6 +145,6 @@ songsRouter.get('/', httpGetSongs)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-songsRouter.post('/', httpAddSong)
+songsRouter.post('/', requireApiKey, httpAddSong)
 
 export { songsRouter };

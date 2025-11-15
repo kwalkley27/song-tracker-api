@@ -15,16 +15,44 @@ describe("Users API", () => {
     expect(response.body.data).toBeInstanceOf(Array);
   });
 
-  it("POST / should add a new user", async () => {
+  it("POST / should add a new user with valid API key", async () => {
+    const newUser = {
+      username: `testuser${Date.now()}`,
+      instrument: "Guitar",
+    };
+
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(newUser);
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('username', newUser.username);
+    expect(response.body).toHaveProperty('instrument', newUser.instrument);
+  });
+
+  it("POST / should return 401 without API key", async () => {
     const newUser = {
       username: `testuser${Date.now()}`,
       instrument: "Guitar",
     };
 
     const response = await supertest(app).post("/").send(newUser);
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('username', newUser.username);
-    expect(response.body).toHaveProperty('instrument', newUser.instrument);
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty('error');
+  });
+
+  it("POST / should return 403 with invalid API key", async () => {
+    const newUser = {
+      username: `testuser${Date.now()}`,
+      instrument: "Guitar",
+    };
+
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "invalid-key")
+      .send(newUser);
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty('error');
   });
 
   it("POST / should return a 400 error if required fields are missing", async () => {
@@ -32,7 +60,10 @@ describe("Users API", () => {
       username: "testuser",
     };
 
-    const response = await supertest(app).post("/").send(newUser);
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(newUser);
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('error');
   });
@@ -43,7 +74,10 @@ describe("Users API", () => {
       instrument: "Piano",
     };
 
-    const response = await supertest(app).post("/").send(invalidUser);
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(invalidUser);
     expect(response.status).toBe(400);
   });
 
@@ -53,7 +87,10 @@ describe("Users API", () => {
       instrument: "Drums",
     };
 
-    const response = await supertest(app).post("/").send(invalidUser);
+    const response = await supertest(app)
+      .post("/")
+      .set("X-API-Key", "test-key-abcdef")
+      .send(invalidUser);
     expect(response.status).toBe(400);
   });
 });
