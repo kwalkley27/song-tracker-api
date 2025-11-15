@@ -2,6 +2,7 @@ import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import morgan from 'morgan'
 import helmet from 'helmet'
+import cors from 'cors'
 import https from "https"
 import fs from "fs"
 import path from "path"
@@ -16,6 +17,27 @@ import { setlistRouter } from "./controllers/setlist/setlist.router.js"
 const PORT = process.env['NODE_PORT'] || 3000
 
 const app = express()
+
+// CORS configuration
+const allowedOrigins = process.env['CORS_ORIGIN']
+  ? process.env['CORS_ORIGIN'].split(',').map(origin => origin.trim())
+  : ['https://localhost:3000', 'http://localhost:3000'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(helmet({
   contentSecurityPolicy: false, // Disable for Swagger UI to work
