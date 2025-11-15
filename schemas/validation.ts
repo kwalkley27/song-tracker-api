@@ -77,7 +77,24 @@ export const setlistQuerySchema = z.object({
         .default(5)
 });
 
+// Pagination query validation
+export const paginationQuerySchema = z.object({
+    limit: z.string()
+        .regex(/^\d+$/, "Limit must be a number")
+        .transform(Number)
+        .refine(val => val > 0 && val <= 100, "Limit must be between 1 and 100")
+        .optional()
+        .default(20),
+    offset: z.string()
+        .regex(/^\d+$/, "Offset must be a number")
+        .transform(Number)
+        .refine(val => val >= 0, "Offset must be 0 or greater")
+        .optional()
+        .default(0)
+});
+
 // Type exports for use in controllers
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type CreateSongInput = z.infer<typeof createSongSchema>;
 export type CreatePlayedSongInput = z.infer<typeof createPlayedSongSchema>;
+export type PaginationQuery = z.infer<typeof paginationQuerySchema>;

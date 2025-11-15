@@ -1,6 +1,6 @@
 import { addSong, getSongs } from "../../models/songs.model.js"
 import type { Request, Response } from "express"
-import { createSongSchema } from "../../schemas/validation.js"
+import { createSongSchema, paginationQuerySchema } from "../../schemas/validation.js"
 import { ZodError } from "zod"
 
 async function httpAddSong(req:Request, res:Response) {
@@ -23,8 +23,24 @@ async function httpAddSong(req:Request, res:Response) {
     }
 }
 
-async function httpGetSongs(_req:Request, res:Response) {
-    return res.status(200).json(await getSongs())
+async function httpGetSongs(req:Request, res:Response) {
+    try {
+        // Validate pagination query parameters
+        const { limit, offset } = paginationQuerySchema.parse(req.query);
+
+        // Get songs with pagination
+        const result = await getSongs(limit, offset);
+
+        return res.status(200).json(result);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return res.status(400).json({
+                error: "Invalid query parameters",
+                details: error.issues
+            });
+        }
+        throw error;
+    }
 }
 
 export {

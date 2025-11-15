@@ -1,6 +1,6 @@
 import { addUser, getUsers } from "../../models/users.model.js"
 import type { Request, Response } from "express"
-import { createUserSchema } from "../../schemas/validation.js"
+import { createUserSchema, paginationQuerySchema } from "../../schemas/validation.js"
 import { ZodError } from "zod"
 
 async function httpAddUser(req:Request, res:Response) {
@@ -23,8 +23,24 @@ async function httpAddUser(req:Request, res:Response) {
     }
 }
 
-async function httpGetUsers(_req:Request, res:Response) {
-    return res.status(200).json(await getUsers())
+async function httpGetUsers(req:Request, res:Response) {
+    try {
+        // Validate pagination query parameters
+        const { limit, offset } = paginationQuerySchema.parse(req.query);
+
+        // Get users with pagination
+        const result = await getUsers(limit, offset);
+
+        return res.status(200).json(result);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return res.status(400).json({
+                error: "Invalid query parameters",
+                details: error.issues
+            });
+        }
+        throw error;
+    }
 }
 
 export {

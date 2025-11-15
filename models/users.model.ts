@@ -18,8 +18,24 @@ async function addUser(user:Omit<User, 'lastPlayed'>) {
 
 }
 
-async function getUsers() {
-    return prisma.user.findMany();
+async function getUsers(limit: number = 20, offset: number = 0) {
+    const [users, total] = await Promise.all([
+        prisma.user.findMany({
+            skip: offset,
+            take: limit,
+        }),
+        prisma.user.count()
+    ]);
+
+    return {
+        data: users,
+        pagination: {
+            total,
+            limit,
+            offset,
+            hasMore: offset + limit < total
+        }
+    };
 }
 
 export {

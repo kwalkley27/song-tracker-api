@@ -7,10 +7,16 @@ app.use(express.json());
 app.use(songsRouter);
 
 describe("Songs API", () => {
-  it("GET / should return all songs", async () => {
+  it("GET / should return paginated songs", async () => {
     const response = await supertest(app).get("/");
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toHaveProperty('data');
+    expect(response.body).toHaveProperty('pagination');
+    expect(response.body.data).toBeInstanceOf(Array);
+    expect(response.body.pagination).toHaveProperty('total');
+    expect(response.body.pagination).toHaveProperty('limit');
+    expect(response.body.pagination).toHaveProperty('offset');
+    expect(response.body.pagination).toHaveProperty('hasMore');
   });
 
   it("POST / should add a new song", async () => {

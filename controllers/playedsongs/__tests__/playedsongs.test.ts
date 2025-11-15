@@ -7,10 +7,12 @@ app.use(express.json());
 app.use(playedSongsRouter);
 
 describe("PlayedSongs API", () => {
-  it("GET / should return all played songs", async () => {
+  it("GET / should return paginated played songs", async () => {
     const response = await supertest(app).get("/");
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toHaveProperty('data');
+    expect(response.body).toHaveProperty('pagination');
+    expect(response.body.data).toBeInstanceOf(Array);
   });
 
   it("POST / should add a new played song", async () => {

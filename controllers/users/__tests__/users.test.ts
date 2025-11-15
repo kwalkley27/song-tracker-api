@@ -7,10 +7,12 @@ app.use(express.json());
 app.use(usersRouter);
 
 describe("Users API", () => {
-  it("GET / should return all users", async () => {
+  it("GET / should return paginated users", async () => {
     const response = await supertest(app).get("/");
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toHaveProperty('data');
+    expect(response.body).toHaveProperty('pagination');
+    expect(response.body.data).toBeInstanceOf(Array);
   });
 
   it("POST / should add a new user", async () => {

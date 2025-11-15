@@ -4,7 +4,7 @@ import {
     getLatestPlayedSongs,
 } from "../../models/playedsongs.model.js"
 import type { Request, Response } from "express"
-import { createPlayedSongSchema } from "../../schemas/validation.js"
+import { createPlayedSongSchema, paginationQuerySchema } from "../../schemas/validation.js"
 import { ZodError } from "zod"
 
 async function httpAddPlayedSong(req:Request, res:Response) {
@@ -33,8 +33,24 @@ async function httpAddPlayedSong(req:Request, res:Response) {
     }
 }
 
-async function httpGetPlayedSongs(_req:Request, res:Response) {
-    return res.status(200).json(await getPlayedSongs())
+async function httpGetPlayedSongs(req:Request, res:Response) {
+    try {
+        // Validate pagination query parameters
+        const { limit, offset } = paginationQuerySchema.parse(req.query);
+
+        // Get played songs with pagination
+        const result = await getPlayedSongs(limit, offset);
+
+        return res.status(200).json(result);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            return res.status(400).json({
+                error: "Invalid query parameters",
+                details: error.issues
+            });
+        }
+        throw error;
+    }
 }
 
 // Gets the latest played songs for a user, limited by the specified number
