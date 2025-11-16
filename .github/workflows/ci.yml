@@ -29,6 +29,8 @@ jobs:
         run: npx prisma generate
 
       - name: Run tests
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
         run: npm test
 
   build:
@@ -56,6 +58,8 @@ jobs:
         run: npm run build
 
       - name: Run tests
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
         run: npm test
 
       - name: Upload build artifacts
