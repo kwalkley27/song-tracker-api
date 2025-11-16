@@ -139,6 +139,11 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 /generated/prisma
-prisma/dev.db 
+prisma/dev.db
 prisma/migrations
 certs
+
+# API Keys
+# authorized_keys.json is included for demo purposes
+# For production, create authorized_keys.production.json and add it here:
+# authorized_keys.production.json

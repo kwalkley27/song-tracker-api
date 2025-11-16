@@ -13,8 +13,24 @@ async function addPlayedSong(playedSong:PlayedSong) {
     });
 }
 
-async function getPlayedSongs() {
-    return prisma.playedSong.findMany();
+async function getPlayedSongs(limit: number = 20, offset: number = 0) {
+    const [playedSongs, total] = await Promise.all([
+        prisma.playedSong.findMany({
+            skip: offset,
+            take: limit,
+        }),
+        prisma.playedSong.count()
+    ]);
+
+    return {
+        data: playedSongs,
+        pagination: {
+            total,
+            limit,
+            offset,
+            hasMore: offset + limit < total
+        }
+    };
 }
 
 async function getLatestPlayedSongs(userId:number, limit:number) {

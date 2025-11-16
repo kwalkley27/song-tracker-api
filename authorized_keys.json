@@ -1,0 +1,19 @@
+{
+  "keys": [
+    {
+      "key": "demo-key-12345",
+      "name": "Demo User 1",
+      "description": "Demo API key for testing"
+    },
+    {
+      "key": "admin-key-67890",
+      "name": "Admin User",
+      "description": "Admin API key with full access"
+    },
+    {
+      "key": "test-key-abcdef",
+      "name": "Test User",
+      "description": "API key for automated tests"
+    }
+  ]
+}
