@@ -7,7 +7,8 @@ const compilerOptions = tsconfig.compilerOptions || {};
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  preset: 'ts-jest',
+  //preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   testMatch: [
     '**/__tests__/**/*.ts',
@@ -19,7 +20,8 @@ module.exports = {
   transform: {
     '^.+\\.ts$': ['ts-jest', {
       tsconfig: 'tsconfig.test.json',
-      useESM: false
+      //useESM: false
+      useESM: true
     }]
   },
   moduleNameMapper: {

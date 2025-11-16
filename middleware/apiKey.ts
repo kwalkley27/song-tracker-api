@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 interface ApiKey {
     key: string;
@@ -23,7 +24,12 @@ function loadAuthorizedKeys(): Set<string> {
     }
 
     try {
-        const keysPath = path.join(process.cwd(), 'authorized_keys.json');
+        // Get the directory of this module file
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+
+        // Go up to project root and find authorized_keys.json
+        const keysPath = path.join(__dirname, '..', 'authorized_keys.json');
         const fileContent = fs.readFileSync(keysPath, 'utf-8');
         const data: AuthorizedKeys = JSON.parse(fileContent);
 
